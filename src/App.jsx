@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Offcanvas } from 'react-bootstrap';
-import api from './services/api'
+import axios from './services/api';
 
 import EconomicCard from './components/EconomicCard';
 
@@ -38,14 +38,14 @@ function App() {
 
     setData([...data, newData]);
 
-    api.create('economics', newData);
+    axios.post('/economics', newData);
     
     setShowOffCanvas(false);
   }
 
   useEffect(() => {
     const loadData = async () => {
-      const newData = await api.read('economics');
+      const newData = (await axios.get('/economics')).data;
 
       setData([...data, ...newData]);
     }
