@@ -1,147 +1,33 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Offcanvas } from 'react-bootstrap';
-import axios from './services/api';
+import { Routes, Route, Link } from "react-router-dom";
 
-import EconomicCard from './components/EconomicCard';
+import Home from './pages/Home';
+import EconomicDetails from './pages/EconomicDetails';
 
 function App() {
-  const buttonEl = useRef(null);
-
-  const [data, setData] = useState([]);
-  const [showOffCanvas, setShowOffCanvas] = useState(false);
-  const [newData, setNewData] = useState({
-    title: '',
-    symbol: '',
-    chartType: 'candle'
-  })
-
-  const handleChangeForm = (event) => {
-    const {name, value} = event.target;
-
-    console.log(name, value);
-
-    setNewData({...newData, [name]: value});
-  }
-
-  const handleClose = () => {
-    setShowOffCanvas(false);
-  }
-
-  const handleClick = () => {
-    // buttonEl.current.disabled = true;
-
-    setShowOffCanvas(true);
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-
-    setData([...data, newData]);
-
-    axios.post('/economics', newData);
-    
-    setShowOffCanvas(false);
-  }
-
-  useEffect(() => {
-    const loadData = async () => {
-      const newData = (await axios.get('/economics')).data;
-
-      setData([...data, ...newData]);
-    }
-
-    loadData();
-  }, []);
-
   return (
     <>
-      <div className="container">
-        <h1 className="text-center my-5">
-          Radar Econômico
-          <button
-            className="btn btn-light border fw-bold float-end"
-            type="button"
-            aria-controls="offcanvasRight"
-            onClick={handleClick}
-            ref={buttonEl}
-          >
-            +
+      <nav className="navbar navbar-expand-lg bg-light">
+        <div className="container-fluid">
+          <Link className="navbar-brand" to="/">Navbar</Link>
+          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span className="navbar-toggler-icon"></span>
           </button>
-        </h1>
-        {!data.length && <p className="text-center">Nenhum ativo cadastrado.</p>}
-        <div className="row row-cols-1 row-cols-md-2 g-4">
-          {data.map((ticker, index) => (
-            <EconomicCard ticker={ticker} key={index} />
-          ))}
+          <div className="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+              <li className="nav-item">
+                <Link className="nav-link active" aria-current="page" to="/">Home</Link>
+              </li>
+            </ul>
+          </div>
         </div>
+      </nav>
+      <div className="container">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="economic/:id" element={<EconomicDetails />} />
+        </Routes>
       </div>
-
-      <Offcanvas show={showOffCanvas} onHide={handleClose} placement="end">
-        <Offcanvas.Header closeButton>
-          <Offcanvas.Title>Novo Item</Offcanvas.Title>
-        </Offcanvas.Header>
-        <Offcanvas.Body>
-          <form onSubmit={handleSubmit}>
-            <div className="mb-3">
-              <label htmlFor="title" className="form-label">Nome</label>
-              <input
-                type="text"
-                className="form-control"
-                id="title"
-                name="title"
-                placeholder="Dólar"
-                onChange={handleChangeForm}
-              />
-            </div>
-            <div className="mb-3">
-              <label htmlFor="symbol" className="form-label">Identificador</label>
-              <input
-                type="text"
-                className="form-control"
-                id="symbol"
-                name="symbol"
-                placeholder="USDBRL"
-                onChange={handleChangeForm}
-              />
-            </div>
-            <div className="mb-3">
-              <div className="form-label">Gráfico</div>
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="chartType"
-                  id="candleChart"
-                  value="candle"
-                  checked={newData.chartType === 'candle'}
-                  onChange={handleChangeForm}
-                />
-                <label className="form-check-label" htmlFor="candleChart"> Vela </label>
-              </div>
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="chartType"
-                  id="lineChart"
-                  value="line"
-                  checked={newData.chartType === 'line'}
-                  onChange={handleChangeForm}
-                />
-                <label className="form-check-label" htmlFor="lineChart"> Linha </label>
-              </div>
-            </div>
-            <div>
-              <button type="submit" className="btn btn-primary border float-end">
-                Cadastrar
-              </button>
-            </div>
-          </form>
-        </Offcanvas.Body>
-      </Offcanvas>
     </>
-
-    
   );
 }
 

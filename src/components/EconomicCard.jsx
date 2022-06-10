@@ -1,11 +1,14 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
 import { SingleTicker } from 'react-ts-tradingview-widgets';
 
 function EconomicCard({ ticker }) {
   return (
     <div className="col">
       <div className="card">
-        <div className="card-header">{ticker.title}</div>
+        <div className="card-header">
+          <Link to={'/economic/' + ticker.id }>{ticker.title}</Link>
+        </div>
         <div className="card-body p-0">
           <SingleTicker
             colorTheme="dark"
