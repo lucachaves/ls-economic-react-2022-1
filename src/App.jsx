@@ -1,6 +1,6 @@
-import React from 'react'
-import { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Offcanvas } from 'react-bootstrap';
+import api from './services/api'
 
 import EconomicCard from './components/EconomicCard';
 
@@ -37,9 +37,21 @@ function App() {
     event.preventDefault();
 
     setData([...data, newData]);
+
+    api.create('economics', newData);
     
     setShowOffCanvas(false);
   }
+
+  useEffect(() => {
+    const loadData = async () => {
+      const newData = await api.read('economics');
+
+      setData([...data, ...newData]);
+    }
+
+    loadData();
+  }, []);
 
   return (
     <>
