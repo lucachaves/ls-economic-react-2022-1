@@ -3,11 +3,13 @@ import { Offcanvas } from 'react-bootstrap';
 import axios from '../services/api';
 
 import EconomicCard from '../components/EconomicCard';
+import { useEconomicData } from '../contexts/EconomicContext';
 
 function Home() {
   const buttonEl = useRef(null);
 
-  const [data, setData] = useState([]);
+  const {data, setData} = useEconomicData();
+
   const [showOffCanvas, setShowOffCanvas] = useState(false);
   const [newData, setNewData] = useState({
     title: '',
@@ -71,7 +73,9 @@ function Home() {
         {!data.length && <p className="text-center">Nenhum ativo cadastrado.</p>}
         <div className="row row-cols-1 row-cols-md-2 g-4">
           {data.map((ticker, index) => (
-            <EconomicCard ticker={ticker} key={index} />
+            <EconomicCard ticker={ticker} key={index}>
+              <h3 style={{textAlign: 'center'}}>{ticker.title}</h3>
+            </EconomicCard>
           ))}
         </div>
       </div>

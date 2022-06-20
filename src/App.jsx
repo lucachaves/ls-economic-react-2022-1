@@ -2,6 +2,7 @@ import { Routes, Route, Link } from "react-router-dom";
 
 import Home from './pages/Home';
 import EconomicDetails from './pages/EconomicDetails';
+import { EconomicDataContextProvider } from "./contexts/EconomicContext";
 
 function App() {
   return (
@@ -22,10 +23,12 @@ function App() {
         </div>
       </nav>
       <div className="container">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="economic/:id" element={<EconomicDetails />} />
-        </Routes>
+        <EconomicDataContextProvider>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="economic/:id" element={<EconomicDetails />} />
+          </Routes>
+        </EconomicDataContextProvider>
       </div>
     </>
   );

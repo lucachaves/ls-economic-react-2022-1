@@ -1,5 +1,5 @@
 import axios from 'axios';
 
 export default axios.create({
-  baseURL: 'http://localhost:3001'
+  baseURL: 'https://economics-json-server-ls-20221--lucachaves.repl.co'
 });

@@ -2,12 +2,12 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 import { SingleTicker } from 'react-ts-tradingview-widgets';
 
-function EconomicCard({ ticker }) {
+function EconomicCard({ ticker, children }) {
   return (
     <div className="col">
       <div className="card">
         <div className="card-header">
-          <Link to={'/economic/' + ticker.id }>{ticker.title}</Link>
+          <Link to={'/economic/' + ticker.id }>{children}</Link>
         </div>
         <div className="card-body p-0">
           <SingleTicker
