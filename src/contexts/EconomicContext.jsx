@@ -1,25 +1,53 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from 'react';
 
 export const EconomicDataContext = createContext({});
 
-export function EconomicDataContextProvider({ children }) {
-  const [data, setData] = useState([]);
+import axios from '../services/api';
 
-  const getData = (id) => {
-    return data.find((item) => item.id === Number(id));
-  }
+export function EconomicDataContextProvider({ children }) {
+  const [tickers, setTickers] = useState([]);
+  const [isShowCreateTickerOffcanvas, setIsShowCreateTickerOffcanvas] =
+    useState(false);
+
+  const getTicker = (id) => {
+    return tickers.find((item) => item.id === Number(id));
+  };
+
+  const toggleCreateTickerOffcanvas = () => {
+    setIsShowCreateTickerOffcanvas(!isShowCreateTickerOffcanvas);
+  };
+
+  const createTicker = (newTicker) => {
+    setTickers([...tickers, newTicker]);
+
+    axios.post('/economics', newTicker);
+  };
+
+  useEffect(() => {
+    const loadTickers = async () => {
+      const newTickers = (await axios.get('/economics')).data;
+
+      setTickers([...tickers, ...newTickers]);
+    };
+
+    if (!tickers.length) {
+      loadTickers();
+    }
+  }, []);
 
   return (
     <EconomicDataContext.Provider
       value={{
-        data,
-        setData,
-        getData
+        tickers,
+        getTicker,
+        createTicker,
+        isShowCreateTickerOffcanvas,
+        toggleCreateTickerOffcanvas,
       }}
     >
       {children}
     </EconomicDataContext.Provider>
-  )
+  );
 }
 
 export function useEconomicData() {
