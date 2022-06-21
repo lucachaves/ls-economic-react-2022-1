@@ -1,4 +1,3 @@
-import axios from '../services/api';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { AdvancedRealTimeChart } from 'react-ts-tradingview-widgets';
@@ -14,7 +13,9 @@ function EconomicDetails() {
 
   useEffect(() => {
     const loadTicker = async () => {
-      setTicker(getTicker(id));
+      const currentTicker = getTicker(id);
+
+      setTicker(currentTicker);
     };
 
     loadTicker();

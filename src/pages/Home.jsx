@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { Button } from 'react-bootstrap';
 
 import CreateTickerOffcanvas from '../components/CreateTickerOffcanvas';
@@ -8,13 +8,18 @@ import { useEconomicData } from '../contexts/EconomicContext';
 
 function Home() {
   const buttonEl = useRef(null);
-  const { tickers, toggleCreateTickerOffcanvas } = useEconomicData();
+  const { tickers, loadTickers, toggleCreateTickerOffcanvas } =
+    useEconomicData();
 
   const handleClick = () => {
     buttonEl.current.blur();
 
     toggleCreateTickerOffcanvas();
   };
+
+  useEffect(() => {
+    loadTickers();
+  }, []);
 
   return (
     <>

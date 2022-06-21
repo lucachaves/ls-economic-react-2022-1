@@ -5,7 +5,7 @@ import { useEconomicData } from '../contexts/EconomicContext';
 function CreateTickerOffcanvas() {
   const {
     isShowCreateTickerOffcanvas,
-    createTicker,
+    handleCreateTicker,
     toggleCreateTickerOffcanvas,
   } = useEconomicData();
 
@@ -28,7 +28,7 @@ function CreateTickerOffcanvas() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    createTicker(newTicker);
+    handleCreateTicker(newTicker);
 
     toggleCreateTickerOffcanvas();
   };
